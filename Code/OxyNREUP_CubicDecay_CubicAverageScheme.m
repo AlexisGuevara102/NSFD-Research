@@ -1,0 +1,170 @@
+% Oxy NREUP Summer Research - CUBIC AVERAGE SCHEME
+% Alexis Guevara
+
+%{
+This script numerically solves the IVP u'(t) = -u(t)^3, u(0) = u_0 > 0
+Domain is a<=t<b
+True Solution is u(t) = u(0)/sqrt(1+2*t*(u_0)^2)
+%}
+
+format long
+f1  = @(u) -u^3;    % function
+a   = 0; b  = 1;    % endpoints
+u_0 = 1;    % initial condition
+N_t   = input('Enter the number of partitions along the t-axis: ');
+delta_t = (b-a)/N_t;
+% where T = delta_t * N_t;
+T = zeros(1,N_t+1);
+T = a:delta_t:b;
+
+% EXACT SOLUTION
+z = 1./sqrt(2*T+1);
+
+% STANDARD FINITE METHOD
+S = zeros(1,N_t+1);
+S(1) = 1;
+for j = 1:N_t
+    S(j+1) = -(S(j)^3)*delta_t + S(j);
+end
+S(1) = 1;
+
+% n = 20
+n_20 = 20; 
+h_20 = (b-a)/n_20;
+T_20 = zeros(1,n_20+1);
+T_20 = a:h_20:b;
+S20 = zeros(1,n_20+1);
+S20(1) = 1;
+for j = 1:n_20
+    S20(j+1) = -(S20(j)^3)*h_20 + S20(j);
+end
+S20(1) = 1;
+
+% n = 40
+n_40 = 40;
+h_40 = (b-a)/n_40;
+T_40 = zeros(1,n_40+1);
+T_40 = a:h_40:b;
+S40 = zeros(1,n_40+1);
+S40(1) = 1;
+for j = 1:n_40
+    S40(j+1) = -(S40(j)^3)*h_40 + S40(j);
+end
+S40(1) = 1;
+
+% n = 100
+n_100 = 100; 
+h_100 = (b-a)/100;
+T_100 = zeros(1,100+1);
+T_100 = a:h_100:b;
+S100 = zeros(1,n_100+1);
+S100(1) = 1;
+for j = 1:n_100
+    S100(j+1) = -(S100(j)^3)*h_100 + S100(j);
+end
+S100(1) = 1;
+
+
+
+
+% CUBIC AVERAGE METHOD ___________________________________________________
+C = zeros(1,N_t+1);
+C(1) = 1;
+for j = 1:N_t
+    C(j+1) = (-27*(delta_t^3)*(C(j)^3) + 54*(delta_t^2)*(C(j)) + sqrt(864*(delta_t^3) + (54*(delta_t^2)*(C(j)) - 27*(delta_t^3)*(C(j)^3))^2))^(1/3)/(3*2^(1/3)*delta_t) - (2*2^(1/3))/(-27*(delta_t^3)*(C(j)^3) + 54*(delta_t^2)*(C(j)) + sqrt(864*(delta_t^3) + (54*(delta_t^2)*(C(j)) - 27*(delta_t^3)*(C(j)^3))^2))^(1/3);
+end
+C(1) = 1;
+
+% n = 20
+n_20 = 20; 
+h_20 = (b-a)/n_20;
+T_20 = zeros(1,n_20+1);
+T_20 = a:h_20:b;
+C20 = zeros(1,n_20+1);
+C20(1) = 1;
+for j = 1:n_20
+    C20(j+1) = (-27*(h_20^3)*(C20(j)^3) + 54*(h_20^2)*(C20(j)) + sqrt(864*(h_20^3) + (54*(h_20^2)*(C20(j)) - 27*(h_20^3)*(C20(j)^3))^2))^(1/3)/(3*2^(1/3)*h_20) - (2*2^(1/3))/(-27*(h_20^3)*(C20(j)^3) + 54*(h_20^2)*(C20(j)) + sqrt(864*(h_20^3) + (54*(h_20^2)*(C20(j)) - 27*(h_20^3)*(C20(j)^3))^2))^(1/3);
+end
+C20(1) = 1;
+
+% n = 40
+n_40 = 40;
+h_40 = (b-a)/n_40;
+T_40 = zeros(1,n_40+1);
+T_40 = a:h_40:b;
+C40 = zeros(1,n_40+1);
+C40(1) = 1;
+for j = 1:n_40
+    C40(j+1) = (-27*(h_40^3)*(C40(j)^3) + 54*(h_40^2)*(C40(j)) + sqrt(864*(h_40^3) + (54*(h_40^2)*(C40(j)) - 27*(h_40^3)*(C40(j)^3))^2))^(1/3)/(3*2^(1/3)*h_40) - (2*2^(1/3))/(-27*(h_40^3)*(C40(j)^3) + 54*(h_40^2)*(C40(j)) + sqrt(864*(h_40^3) + (54*(h_40^2)*(C40(j)) - 27*(h_40^3)*(C40(j)^3))^2))^(1/3);;
+end
+C40(1) = 1;
+
+% n = 100
+n_100 = 100; 
+h_100 = (b-a)/100;
+T_100 = zeros(1,100+1);
+T_100 = a:h_100:b;
+C100 = zeros(1,n_100+1);
+C100(1) = 1;
+for j = 1:n_100
+    C100(j+1) = (-27*(h_100^3)*(C100(j)^3) + 54*(h_100^2)*(C100(j)) + sqrt(864*(h_100^3) + (54*(h_100^2)*(C100(j)) - 27*(h_100^3)*(C100(j)^3))^2))^(1/3)/(3*2^(1/3)*h_100) - (2*2^(1/3))/(-27*(h_100^3)*(C100(j)^3) + 54*(h_100^2)*(C100(j)) + sqrt(864*(h_100^3) + (54*(h_100^2)*(C100(j)) - 27*(h_100^3)*(C100(j)^3))^2))^(1/3);;
+end
+C100(1) = 1;
+
+
+% Plot of True Solution & Numerical Solution
+plot(T,z,T,C,'o',T,S,'+')
+title('Graph of Cubic Average Scheme u_{k+1}, SFD Scheme, & Exact Solution u(t)')
+xlabel('t-axis')
+ylabel('u-axis')
+legend('Exact Solution','Cubic Average Scheme','SFD Scheme')
+
+
+
+%{
+% DISCRETE ERRORS FOR VALUES H = 1/N & PLOT
+err_n_cubicavg    = abs(C-z);
+err_n20_cubicavg  = abs(C20-(1./sqrt(1+2*T_20)));
+err_n40_cubicavg  = abs(C40-(1./sqrt(1+2*T_40)));
+err_n100_cubicavg = abs(C100-(1./sqrt(1+2*T_100)));
+
+plot(T,err_n_cubicavg,'o', ...
+    T_20,err_n20_cubicavg,'+', ...
+    T_40,err_n40_cubicavg,'x', ...
+    T_100,err_n100_cubicavg,'*')
+title('Discrete Error of Cubic Average Scheme for Various Values of H=1/N')
+xlabel('t-axis')
+ylabel(['Error ' char(949) '_{k}'])
+legend('N=10','N=20','N=40','N=100')
+%}
+
+%{
+% create for standard finite difference
+% DISCRETE ERRORS FOR VALUES H = 1/N & PLOT
+err_n_sfd    = abs(S-z);
+err_n20_sfd  = abs(S20-(1./sqrt(1+2*T_20)));
+err_n40_sfd  = abs(S40-(1./sqrt(1+2*T_40)));
+err_n100_sfd = abs(S100-(1./sqrt(1+2*T_100)));
+
+plot(T,err_n_sfd,'o', ...
+    T_20,err_n20_sfd,'+', ...
+    T_40,err_n40_sfd,'x', ...
+    T_100,err_n100_sfd,'*')
+title('Discrete Error of SFD Scheme for Various Values of H=1/N')
+xlabel('t-axis')
+ylabel(['Error ' char(949) '_{k}'])
+legend('N=10','N=20','N=40','N=100')
+%}
+
+%{
+% PLOT ERRORS OF EACH INITIAL METHOD
+error_stndrd  = abs(S - z); % STANDARD FINITE ERROR
+error_cubic   = abs(C - z); % CUBIC AVERAGE ERROR
+
+plot(T,error_stndrd,'o',T,error_cubic,'+')
+title('Graph of Errors of Discrete Methods u_{k+1}')
+xlabel('t-axis')
+ylabel(['Error ' char(949) '_{k}'])
+legend('SFD Scheme', 'Cubic Average Scheme')
+%}
+
